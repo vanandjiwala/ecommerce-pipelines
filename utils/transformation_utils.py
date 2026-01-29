@@ -53,7 +53,7 @@ def deduplicate_data_by_time(
     partition_cols: List[str], 
     order_col: str
 ) -> DataFrame:
-    window_spec = Window.partitionBy(*partition_cols).orderBy(F.col(order_col))
+    window_spec = Window.partitionBy(*partition_cols).orderBy(F.col(order_col).desc())
     df = df.withColumn("row_number", F.row_number().over(window_spec))
     df = df.filter(F.col("row_number") == 1).drop("row_number")
     return df

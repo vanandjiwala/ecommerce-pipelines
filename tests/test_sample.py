@@ -4,4 +4,4 @@ import pytest
 
 def test_text_is_my_name_is_sss():
     text = dwh_utils.print_name()
-    assert text == "my name is sss"
+    assert text == "Sample Project Function"
