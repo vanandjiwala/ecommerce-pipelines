@@ -244,3 +244,20 @@ def test_all_nulls():
     df = fill_nulls(spark, df, "name", "NA")
     null_count = df.filter(df["name"].isNull()).count()
     assert null_count == 0
+
+## Known Issue: space/characters between either first name or last name
+def test_name_transformation():
+    data = [
+        (1, "       Kristi;'[]na Nunn"),
+        (2, "             Dorothy Wardle"),
+        (3, "         =--Katharine Harms"),
+        (4, "     Rac5467hel Payne"),
+        (5, "_12312Patrick Bzostek"),
+        (6, ")(*&Sung Pak"),
+        (7, "   _Mike Vitt 12313orini")
+    ]
+    df = spark.createDataFrame(data, ["id", "name"])
+    df = transform_names_column(spark, df, "name")
+    result = [row.name for row in df.select("name").collect()]
+    assert result == ["Kristina Nunn", "Dorothy Wardle", "Katharine Harms", "Rachel Payne", "Patrick Bzostek", "Sung Pak", "Mike Vittorini"]
+

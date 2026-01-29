@@ -35,6 +35,9 @@ def transform_names_column(
     ).withColumn(
         name_column,
         F.coalesce(name_column, F.lit("Not Available"))
+    ).withColumn(
+        name_column,
+        F.trim(name_column)
     )
     return df_clean
 
