@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Any
 from pyspark.sql import SparkSession
 from delta.tables import DeltaTable, DataFrame
 import pyspark.sql.functions as F
@@ -67,10 +67,14 @@ def round_value(
     df = df.withColumn(column, F.round(F.col(column), round_to))
     return df
 
-def to_date_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy"):
+def to_date_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy") -> DataFrame:
     df = df.withColumn(col_name, F.to_date(F.col(col_name), fmt))
     return df
 
-def to_timestamp_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy"):
+def to_timestamp_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy") -> DataFrame:
     df = df.withColumn(col_name, F.to_timestamp(F.col(col_name), fmt))
+    return df
+
+def fill_nulls(spark: SparkSession, df: DataFrame, col_name: str, value: Any) -> DataFrame:
+    df = df.withColumn(col_name, F.coalesce(F.col(col_name), F.lit(value)))
     return df
