@@ -4,6 +4,7 @@ import pytest
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, TimestampType
 from datetime import datetime
+import pyspark.sql.functions as F
 
 spark = SparkSession.builder.appName('integrity-tests').getOrCreate()
 
@@ -154,3 +155,92 @@ def test_round_value_upper_negative():
     df = round_value(spark, df, "price", 2)
 
     assert df.collect()[1]["price"] != 6.55
+
+
+def test_date_type_conversion():
+    data = [
+        (1, "2023/01/01"),
+        (2, "2023/02/01"),
+        (3, "2023/03/01")
+    ]
+    schema = StructType([
+        StructField("id", IntegerType(), False),
+        StructField("ship_date", StringType(), False),
+    ])
+
+    df = spark.createDataFrame(data, schema)
+    df = to_date_col(spark, df, "ship_date", "yyyy/MM/dd")
+
+    assert dict(df.dtypes)["ship_date"] == "date"
+
+def test_date_type_conversion_default_format():
+    data = [
+        (1, "01/01/2026"),
+        (2, "01/02/2026"),
+        (3, "01/03/2026")
+    ]
+    schema = StructType([
+        StructField("id", IntegerType(), False),
+        StructField("ship_date", StringType(), False),
+    ])
+
+    df = spark.createDataFrame(data, schema)
+    df = to_date_col(spark, df, "ship_date")
+
+    assert dict(df.dtypes)["ship_date"] == "date"
+
+
+def test_timestamp_type_conversion():
+    data = [
+        (1, "2023/01/01"),
+        (2, "2023/02/01"),
+        (3, "2023/03/01")
+    ]
+    schema = StructType([
+        StructField("id", IntegerType(), False),
+        StructField("ship_date", StringType(), False),
+    ])
+
+    df = spark.createDataFrame(data, schema)
+    df = to_timestamp_col(spark, df, "ship_date", "yyyy/MM/dd")
+
+    assert dict(df.dtypes)["ship_date"] == "timestamp"
+
+def test_timestamp_type_conversion_default_format():
+    data = [
+        (1, "01/01/2026"),
+        (2, "01/02/2026"),
+        (3, "01/03/2026")
+    ]
+    schema = StructType([
+        StructField("id", IntegerType(), False),
+        StructField("ship_date", StringType(), False),
+    ])
+
+    df = spark.createDataFrame(data, schema)
+    df = to_timestamp_col(spark, df, "ship_date")
+
+    assert dict(df.dtypes)["ship_date"] == "timestamp"
+
+def test_not_nulls():
+    data = [
+        (1, "prod1"),
+        (2, "prod2"),
+        (3, None)
+    ]
+    df = spark.createDataFrame(data, ["id", "name"])
+    df = fill_nulls(spark, df, "name", "NA")
+    null_count = df.filter(df["name"].isNull()).count()
+    assert null_count == 0
+
+def test_all_nulls():
+    data = [
+        (1),
+        (2),
+        (3)
+    ]
+    df = spark.createDataFrame(data, ["id"])
+    df = df.withColumn("name", F.lit(None))
+    df = fill_nulls(spark, df, "name", "NA")
+    null_count = df.filter(df["name"].isNull()).count()
+    assert null_count == 0
