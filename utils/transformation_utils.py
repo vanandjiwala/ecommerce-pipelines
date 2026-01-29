@@ -149,7 +149,7 @@ def to_timestamp_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str
     return df
 
 def fill_nulls(spark: SparkSession, df: DataFrame, col_name: str, value: Any) -> DataFrame:
-        """
+    """
     Date conversion
     Args:
         spark (spark): spark session
