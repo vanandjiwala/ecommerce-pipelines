@@ -57,4 +57,20 @@ def deduplicate_data_by_time(
     df = df.withColumn("row_number", F.row_number().over(window_spec))
     df = df.filter(F.col("row_number") == 1).drop("row_number")
     return df
-    
+
+def round_value(
+    spark: SparkSession,
+    df: DataFrame,
+    column: str,
+    round_to: int
+) -> DataFrame:
+    df = df.withColumn(column, F.round(F.col(column), round_to))
+    return df
+
+def to_date_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy"):
+    df = df.withColumn(col_name, F.to_date(F.col(col_name), fmt))
+    return df
+
+def to_timestamp_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy"):
+    df = df.withColumn(col_name, F.to_timestamp(F.col(col_name), fmt))
+    return df
