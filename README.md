@@ -121,3 +121,30 @@ pytest <MODULE>py
 ```
 pytest -v -s
 ```
+
+## Sample Report
+
+| Result | Test                                                                                 | Duration | Links |     |     |     |     |     |     |
+| ------ | ------------------------------------------------------------------------------------ | -------- | ----- | --- | --- | --- | --- | --- | --- |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_space               | 00:00:04 |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_special_chars       | 26 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_camelcase_chars     | 22 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_multi_special_chars | 25 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_normalized_cols     | 25 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_normalize_column_with_mixed_special_chars | 24 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_drop_columns                              | 28 ms    |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_drop_empty_column                         | 00:00:02 |       |     |     |     |     |     |     |
+| Passed | tests/test_column_transformations.py::test_drop_single_column_df                     | 18 ms    |       |     |     |     |     |     |     |
+
+## Sample coverage report
+
+```
+Name                                                                                  Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------------------------------------
+/Users/vasav/Documents/Vasav/REPO/ecommerce-pipelines/utils/__init__.py                   0      0   100%
+/Users/vasav/Documents/Vasav/REPO/ecommerce-pipelines/utils/dwh_utils.py                 39     39     0%   1-74
+/Users/vasav/Documents/Vasav/REPO/ecommerce-pipelines/utils/transformation_utils.py      37      0   100%
+/Users/vasav/Documents/Vasav/REPO/ecommerce-pipelines/utils/unity_catalog_utils.py        0      0   100%
+-------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                    76     39    49%
+```
