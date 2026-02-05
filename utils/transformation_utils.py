@@ -3,6 +3,7 @@ from pyspark.sql import SparkSession
 from delta.tables import DeltaTable, DataFrame
 import pyspark.sql.functions as F
 from pyspark.sql.window import Window
+import re
 
 def normalize_column_names(
     spark: SparkSession,
@@ -19,8 +20,21 @@ def normalize_column_names(
     Returns:
         df: df with updated column names
     """
+    def normalize(name: str) -> str:
+        """
+        normalize column name - inner function
+        
+        :param name: Description
+        :type name: str
+        :return: Description
+        :rtype: str
+        """
+        name = name.lower()
+        name = re.sub(r"[^a-z0-9]+", "_", name)
+        return name.strip("_")
+    
     for col in df.columns:
-        df = df.withColumnRenamed(col, col.replace(" ", "_").lower())
+        df = df.withColumnRenamed(col, normalize(col))
     return df
 
 def transform_names_column(
