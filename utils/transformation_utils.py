@@ -145,7 +145,7 @@ def to_date_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "M
     Returns:
         df: df with conversion
     """
-    df = df.withColumn(col_name, F.to_date(F.col(col_name), fmt))
+    df = df.withColumn(col_name, F.try_to_date(F.col(col_name), fmt))
     return df
 
 def to_timestamp_col(spark: SparkSession, df: DataFrame, col_name: str, fmt: str = "MM/dd/yyyy") -> DataFrame:

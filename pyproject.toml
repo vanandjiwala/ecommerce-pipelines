@@ -1,0 +1,12 @@
+[project]
+name = "ecommerce-pipelines"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "delta-spark>=4.0.1",
+    "deltalake>=1.4.1",
+    "pyspark>=4.1.1",
+    "pytest>=9.0.2",
+]

@@ -73,3 +73,51 @@ For simplification, `spark.read` is used to read data from the volume. In produc
 
 - Unit tests are located in `tests` directory. Run the `test_runner` notebook to execute the pytest based tests on databricks environment.
 - In production, these tests can be developed and executed on vs code with databricks connector locally and integrated with CI/CD pipelines.
+
+## Locally Running Test
+
+## Setup UV env
+
+1. uv sync
+
+## Activate Env
+
+```
+source .venv/bin/activate
+```
+
+## Check installed dependancies
+
+```
+uv tree
+```
+
+## JDK
+
+JDK 17 is required to support latest spark version and pyspark code.
+
+## Running tests locally
+
+1. Activate the venv using command `.venv/bin/activate`
+2. First to go the `tests` directory
+3. Run command `pytest`
+
+## Variations
+
+### Running all tests
+
+```
+pytest
+```
+
+### Running a specific module
+
+```
+pytest <MODULE>py
+```
+
+### Running with console output
+
+```
+pytest -v -s
+```
